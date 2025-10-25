@@ -17,10 +17,10 @@ const icon = L.icon({
 
 interface TravelMapProps {
   events: ItineraryEvent[];
-  hoveredEventId?: string | null;
+  hoveredEvent?: ItineraryEvent | null;
 }
 
-function MapController({ events }: { events: ItineraryEvent[] }) {
+function MapController({ events, hoveredEvent }: { events: ItineraryEvent[]; hoveredEvent?: ItineraryEvent | null }) {
   const map = useMap();
 
   useEffect(() => {
@@ -30,10 +30,19 @@ function MapController({ events }: { events: ItineraryEvent[] }) {
     }
   }, [events, map]);
 
+  useEffect(() => {
+    if (hoveredEvent) {
+      map.flyTo(hoveredEvent.coordinates, 15, {
+        duration: 0.8,
+        easeLinearity: 0.5
+      });
+    }
+  }, [hoveredEvent, map]);
+
   return null;
 }
 
-export function TravelMap({ events, hoveredEventId }: TravelMapProps) {
+export function TravelMap({ events, hoveredEvent }: TravelMapProps) {
   const defaultCenter: [number, number] = events.length > 0 
     ? events[0].coordinates 
     : [48.8566, 2.3522];
@@ -48,7 +57,7 @@ export function TravelMap({ events, hoveredEventId }: TravelMapProps) {
         className="h-full w-full"
         zoomControl={true}
       >
-        <MapController events={events} />
+        <MapController events={events} hoveredEvent={hoveredEvent} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -16,6 +16,10 @@ export default function Home() {
     setItinerary(mockItinerary);
   };
 
+  const hoveredEvent = hoveredEventId 
+    ? itinerary?.events.find(e => e.id === hoveredEventId) 
+    : null;
+
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <header className="border-b bg-card shrink-0 z-50">
@@ -37,7 +41,7 @@ export default function Home() {
             <main className="flex-1 bg-muted overflow-hidden">
               <TravelMap 
                 events={itinerary.events}
-                hoveredEventId={hoveredEventId}
+                hoveredEvent={hoveredEvent}
               />
             </main>
           </>
