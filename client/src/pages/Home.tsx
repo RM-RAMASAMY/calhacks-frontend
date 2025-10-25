@@ -17,24 +17,24 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="border-b bg-card sticky top-0 z-50">
+    <div className="h-screen flex flex-col overflow-hidden">
+      <header className="border-b bg-card shrink-0 z-50">
         <div className="container mx-auto px-6 py-4">
           <TripForm onGenerate={handleGenerate} />
         </div>
       </header>
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden min-h-0">
         {itinerary ? (
           <>
-            <aside className="w-full md:w-[480px] lg:w-[520px] border-r bg-card overflow-hidden">
+            <aside className="w-full md:w-[480px] lg:w-[520px] border-r bg-card overflow-y-auto overflow-x-hidden">
               <Timeline 
                 events={itinerary.events}
                 onEventHover={setHoveredEventId}
               />
             </aside>
 
-            <main className="flex-1 bg-muted">
+            <main className="flex-1 bg-muted overflow-hidden">
               <TravelMap 
                 events={itinerary.events}
                 hoveredEventId={hoveredEventId}
@@ -42,7 +42,7 @@ export default function Home() {
             </main>
           </>
         ) : (
-          <main className="flex-1">
+          <main className="flex-1 overflow-hidden">
             <EmptyState />
           </main>
         )}
