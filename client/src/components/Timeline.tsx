@@ -8,10 +8,10 @@ interface TimelineProps {
 
 export function Timeline({ events, onEventHover }: TimelineProps) {
   return (
-    <div className="p-6 space-y-2">
-      <div className="mb-8">
-        <h2 className="text-3xl font-bold font-serif" data-testid="text-timeline-title">Your Itinerary</h2>
-        <p className="text-muted-foreground mt-2">
+    <div className="p-3 space-y-1">
+      <div className="mb-4">
+        <h2 className="text-xl font-bold font-serif" data-testid="text-timeline-title">Your Itinerary</h2>
+        <p className="text-xs text-muted-foreground mt-0.5">
           {events.length} activities planned
         </p>
       </div>

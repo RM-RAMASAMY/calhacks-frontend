@@ -1,6 +1,7 @@
-import { Plane, Home, UtensilsCrossed, Music, Car, MapPin } from "lucide-react";
+import { Plane, Home, UtensilsCrossed, Music, Car, MapPin, Clock, DollarSign, Star } from "lucide-react";
 import type { EventType } from "@shared/schema";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 
 interface TimelineEventProps {
   title: string;
@@ -42,42 +43,148 @@ export function TimelineEvent({
   onHover,
 }: TimelineEventProps) {
   const Icon = iconMap[type];
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+    onHover?.(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    onHover?.(false);
+  };
+
+  // Mock additional options that appear on hover
+  const getAdditionalOptions = () => {
+    if (type === "food") {
+      return [
+        { icon: Star, label: "Rating: 4.5/5", value: "245 reviews" },
+        { icon: DollarSign, label: "Price Range", value: "$$-$$$" },
+        { icon: Clock, label: "Open Hours", value: "11am - 10pm" },
+      ];
+    } else if (type === "accommodation") {
+      return [
+        { icon: Star, label: "Rating: 4.7/5", value: "1,234 reviews" },
+        { icon: DollarSign, label: "Price", value: "$120/night" },
+        { icon: Home, label: "Type", value: "Boutique Hotel" },
+      ];
+    } else if (type === "activity") {
+      return [
+        { icon: Clock, label: "Best Time", value: "Morning/Evening" },
+        { icon: DollarSign, label: "Entry Fee", value: "$15-25" },
+        { icon: Star, label: "Rating", value: "4.8/5" },
+      ];
+    }
+    return [];
+  };
+
+  // Alternative location recommendations based on type
+  const getAlternatives = () => {
+    if (type === "food") {
+      return [
+        { name: "Le Petit Bistro", rating: "4.6", price: "$$", distance: "0.3 km" },
+        { name: "Chez Pierre", rating: "4.4", price: "$$$", distance: "0.5 km" },
+        { name: "Café Lumière", rating: "4.7", price: "$$", distance: "0.4 km" },
+      ];
+    } else if (type === "accommodation") {
+      return [
+        { name: "City View Hotel", rating: "4.5", price: "$110/night", distance: "0.2 km" },
+        { name: "Luxury Suites", rating: "4.8", price: "$180/night", distance: "0.6 km" },
+        { name: "Comfort Inn", rating: "4.3", price: "$85/night", distance: "0.4 km" },
+      ];
+    } else if (type === "activity") {
+      return [
+        { name: "Alternative Tour", rating: "4.6", price: "$20", distance: "0.3 km" },
+        { name: "Similar Attraction", rating: "4.5", price: "$18", distance: "0.7 km" },
+      ];
+    }
+    return [];
+  };
+
+  const additionalOptions = getAdditionalOptions();
+  const alternatives = getAlternatives();
 
   return (
     <div 
-      className="relative pl-8 pb-8 group"
-      onMouseEnter={() => onHover?.(true)}
-      onMouseLeave={() => onHover?.(false)}
+      className={`relative pl-6 pb-4 group transition-all duration-300 ${isHovered ? 'pb-6' : ''}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       data-testid={`event-${type}`}
     >
       {!isLast && (
-        <div className="absolute left-[23px] top-12 bottom-0 w-0.5 bg-border" />
+        <div className="absolute left-[15px] top-8 bottom-0 w-0.5 bg-border" />
       )}
       
-      <div className={`absolute left-0 top-0 w-12 h-12 rounded-full flex items-center justify-center ${typeColors[type]} border transition-transform group-hover:scale-110`}>
-        <Icon className="h-6 w-6" />
+      <div className={`absolute left-0 top-0 w-8 h-8 rounded-full flex items-center justify-center ${typeColors[type]} border transition-all duration-300 ${isHovered ? 'scale-110 shadow-lg' : ''}`}>
+        <Icon className="h-4 w-4" />
       </div>
       
-      <div className="ml-8">
-        <div className="flex items-start justify-between gap-4 mb-2">
+      <div className={`ml-4 transition-all duration-300 ${isHovered ? 'bg-accent/50 -mx-2 px-2 py-2 rounded-lg' : ''}`}>
+        <div className="flex items-start justify-between gap-2 mb-1">
           <div className="flex-1">
-            <h3 className="font-semibold text-lg" data-testid="text-event-title">{title}</h3>
-            <p className="text-sm text-muted-foreground flex items-center gap-1">
-              <MapPin className="h-3 w-3" />
+            <h3 className={`font-semibold leading-tight transition-all duration-300 ${isHovered ? 'text-base' : 'text-sm'}`} data-testid="text-event-title">{title}</h3>
+            <p className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
+              <MapPin className="h-2.5 w-2.5" />
               {location}
             </p>
           </div>
-          <div className="text-right">
-            <p className="text-sm font-medium" data-testid="text-event-time">{time}</p>
-            <Badge variant="secondary" className="mt-1">
+          <div className="text-right flex-shrink-0">
+            <p className="text-[10px] font-medium" data-testid="text-event-time">{time}</p>
+            <Badge variant="secondary" className="mt-0.5 text-[10px] px-1.5 py-0">
               {duration}
             </Badge>
           </div>
         </div>
         
-        <p className="text-sm text-foreground/80 leading-relaxed" data-testid="text-event-description">
+        <p className="text-[11px] text-foreground/80 leading-snug" data-testid="text-event-description">
           {description}
         </p>
+
+        {/* Additional options that appear on hover */}
+        {isHovered && additionalOptions.length > 0 && (
+          <div className="mt-3 pt-2 border-t border-border/50 space-y-1.5 animate-in fade-in slide-in-from-top-2 duration-300">
+            {additionalOptions.map((option, index) => {
+              const OptionIcon = option.icon;
+              return (
+                <div key={index} className="flex items-center justify-between text-[10px]">
+                  <div className="flex items-center gap-1.5 text-muted-foreground">
+                    <OptionIcon className="h-3 w-3" />
+                    <span>{option.label}</span>
+                  </div>
+                  <span className="font-medium text-foreground">{option.value}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Alternative locations */}
+        {isHovered && alternatives.length > 0 && (
+          <div className="mt-3 pt-2 border-t border-border/50 animate-in fade-in slide-in-from-top-3 duration-300">
+            <p className="text-[10px] font-semibold text-muted-foreground mb-2">Other Options Nearby:</p>
+            <div className="space-y-2">
+              {alternatives.map((alt, index) => (
+                <div 
+                  key={index} 
+                  className="flex items-center justify-between p-1.5 rounded bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
+                >
+                  <div className="flex-1">
+                    <p className="text-[10px] font-medium text-foreground">{alt.name}</p>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <span className="text-[9px] text-muted-foreground flex items-center gap-0.5">
+                        <Star className="h-2 w-2 fill-yellow-500 text-yellow-500" />
+                        {alt.rating}
+                      </span>
+                      <span className="text-[9px] text-muted-foreground">{alt.distance}</span>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-medium text-foreground ml-2">{alt.price}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -31,6 +31,15 @@ const hotelRecommendationIcon = L.icon({
   popupAnchor: [1, -34],
 });
 
+// Highlighted green marker for hovered events
+const highlightedIcon = L.icon({
+  iconUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='52' viewBox='0 0 32 52'%3E%3Cpath fill='%2322c55e' stroke='%23fff' stroke-width='2' d='M16 0C7.2 0 0 7.2 0 16c0 12 16 36 16 36S32 28 32 16C32 7.2 24.8 0 16 0z'/%3E%3Ccircle cx='16' cy='16' r='8' fill='%23fff'/%3E%3C/svg%3E",
+  iconSize: [32, 52],
+  iconAnchor: [16, 52],
+  popupAnchor: [1, -44],
+  className: 'highlighted-marker'
+});
+
 interface NearbyPlace {
   id: string;
   name: string;
@@ -115,18 +124,45 @@ function MapController({ events, hoveredEvent }: { events: ItineraryEvent[]; hov
   useEffect(() => {
     if (events.length > 0) {
       const bounds = L.latLngBounds(events.map(e => e.coordinates));
-      map.fitBounds(bounds, { padding: [50, 50] });
+      // Add more padding on the left to account for floating sidebar (~380px panel + margins)
+      // Top padding accounts for search panel (~90px)
+      // Ensure markers always stay on the right side, away from panels
+      map.fitBounds(bounds, { 
+        paddingTopLeft: [450, 140],
+        paddingBottomRight: [80, 80]
+      });
     }
   }, [events, map]);
 
   useEffect(() => {
     if (hoveredEvent) {
-      map.flyTo(hoveredEvent.coordinates, 15, {
+      // Zoom in to specific event when hovering
+      // Calculate bounds that include the hovered event but keep it visible on the right
+      const point = hoveredEvent.coordinates;
+      const bounds = L.latLngBounds([point]);
+      
+      // Expand bounds slightly to give context around the point
+      const expandedBounds = bounds.pad(0.1);
+      
+      // Use consistent large padding to keep marker on right side away from panels
+      map.flyToBounds(expandedBounds, {
+        paddingTopLeft: [450, 140],
+        paddingBottomRight: [80, 80],
+        maxZoom: 15,
+        duration: 0.8,
+        easeLinearity: 0.5
+      });
+    } else if (events.length > 0) {
+      // Zoom out to show entire route when not hovering
+      const bounds = L.latLngBounds(events.map(e => e.coordinates));
+      map.flyToBounds(bounds, { 
+        paddingTopLeft: [450, 140],
+        paddingBottomRight: [80, 80],
         duration: 0.8,
         easeLinearity: 0.5
       });
     }
-  }, [hoveredEvent, map]);
+  }, [hoveredEvent, events, map]);
 
   return null;
 }
@@ -168,26 +204,30 @@ export function TravelMap({ events, hoveredEvent }: TravelMapProps) {
           />
         )}
         
-        {events.map((event, index) => (
-          <Marker
-            key={event.id}
-            position={event.coordinates}
-            icon={icon}
-          >
-            <Popup>
-              <div className="p-2 min-w-[200px]">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-xs font-semibold">
-                    {index + 1}
+        {events.map((event, index) => {
+          const isHovered = hoveredEvent?.id === event.id;
+          return (
+            <Marker
+              key={event.id}
+              position={event.coordinates}
+              icon={isHovered ? highlightedIcon : icon}
+              zIndexOffset={isHovered ? 1000 : 0}
+            >
+              <Popup>
+                <div className="p-2 min-w-[200px]">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-xs font-semibold">
+                      {index + 1}
+                    </div>
+                    <h3 className="font-semibold text-sm">{event.title}</h3>
                   </div>
-                  <h3 className="font-semibold text-sm">{event.title}</h3>
+                  <p className="text-xs text-muted-foreground mb-1">{event.time}</p>
+                  <p className="text-xs">{event.description}</p>
                 </div>
-                <p className="text-xs text-muted-foreground mb-1">{event.time}</p>
-                <p className="text-xs">{event.description}</p>
-              </div>
-            </Popup>
-          </Marker>
-        ))}
+              </Popup>
+            </Marker>
+          );
+        })}
         
         {nearbyPlaces.map((place) => (
           <Marker
