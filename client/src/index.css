@@ -335,6 +335,22 @@
   }
 }
 
+/* Make the highlighted marker visually pronounced: red drop shadow, slight scale and higher stacking */
+.leaflet-marker-icon.highlighted-marker {
+  transform-origin: center bottom;
+  transform: translateZ(0) scale(1.06) !important;
+  /* combine drop shadow and color transform on the marker element itself so it works whether
+     the class is added to the <img> or wrapping element */
+  filter: hue-rotate(-170deg) saturate(1.6) brightness(1.05) drop-shadow(0 8px 18px rgba(239,68,68,0.45)) !important;
+  z-index: 9999 !important;
+}
+
+/* Ensure the marker image is fully opaque and renders smoothly */
+.leaflet-marker-icon.highlighted-marker img {
+  image-rendering: auto;
+  opacity: 1 !important;
+}
+
 /* Animated gradient background */
 @keyframes gradientShift {
   0% {
