@@ -98,6 +98,15 @@ export function TimelineEvent({
         { name: "Alternative Tour", rating: "4.6", price: "$20", distance: "0.3 km" },
         { name: "Similar Attraction", rating: "4.5", price: "$18", distance: "0.7 km" },
       ];
+    } else if (type === "flight" || type === "transit") {
+      return [
+        { name: "Alternative Route", rating: "4.4", price: "Same price", distance: "0.5 km" },
+      ];
+    } else if (type === "entertainment") {
+      return [
+        { name: "Alternative Venue", rating: "4.7", price: "$25", distance: "0.4 km" },
+        { name: "Similar Event", rating: "4.5", price: "$22", distance: "0.6 km" },
+      ];
     }
     return [];
   };
@@ -107,79 +116,115 @@ export function TimelineEvent({
 
   return (
     <div 
-      className={`relative pl-6 pb-4 group transition-all duration-300 ${isHovered ? 'pb-6' : ''}`}
+      className={`relative pl-8 pb-5 group transition-all duration-700 ease-out ${isHovered ? 'pb-6' : ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       data-testid={`event-${type}`}
     >
+      {/* Animated connecting line with gradient */}
       {!isLast && (
-        <div className="absolute left-[15px] top-8 bottom-0 w-0.5 bg-border" />
+        <div className="absolute left-[19px] top-10 bottom-0 w-[2px] overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-b from-border via-border/50 to-transparent"></div>
+        </div>
       )}
       
-      <div className={`absolute left-0 top-0 w-8 h-8 rounded-full flex items-center justify-center ${typeColors[type]} border transition-all duration-300 ${isHovered ? 'scale-110 shadow-lg' : ''}`}>
-        <Icon className="h-4 w-4" />
+      {/* Enhanced icon with glow effect */}
+      <div className={`absolute left-0 top-0 w-10 h-10 rounded-full flex items-center justify-center ${typeColors[type]} border-2 transition-all duration-700 ease-out ${
+        isHovered 
+          ? 'scale-125 shadow-xl ring-2 ring-primary/20 ring-offset-2 ring-offset-background' 
+          : 'shadow-md'
+      }`}>
+        <Icon className={`transition-all duration-700 ease-out ${isHovered ? 'h-5 w-5' : 'h-4 w-4'}`} />
+        {isHovered && (
+          <div className="absolute inset-0 rounded-full bg-current opacity-20 animate-ping"></div>
+        )}
       </div>
       
-      <div className={`ml-4 transition-all duration-300 ${isHovered ? 'bg-accent/50 -mx-2 px-2 py-2 rounded-lg' : ''}`}>
-        <div className="flex items-start justify-between gap-2 mb-1">
+      {/* Card with glassmorphism effect */}
+      <div className={`ml-6 transition-all duration-700 ease-out rounded-xl ${
+        isHovered 
+          ? 'bg-gradient-to-br from-accent/80 to-accent/40 backdrop-blur-sm -mx-3 px-4 py-3 shadow-lg border border-border/50' 
+          : 'hover:bg-accent/30 px-1 py-1'
+      }`}>
+        <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex-1">
-            <h3 className={`font-semibold leading-tight transition-all duration-300 ${isHovered ? 'text-base' : 'text-sm'}`} data-testid="text-event-title">{title}</h3>
-            <p className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
-              <MapPin className="h-2.5 w-2.5" />
+            <h3 className={`font-semibold leading-tight smooth-text-transition ${
+              isHovered ? 'text-lg' : 'text-sm'
+            }`} data-testid="text-event-title">
+              {title}
+            </h3>
+            <p className="text-xs text-muted-foreground flex items-center gap-1.5 mt-1">
+              <MapPin className="h-3 w-3" />
               {location}
             </p>
           </div>
           <div className="text-right flex-shrink-0">
-            <p className="text-[10px] font-medium" data-testid="text-event-time">{time}</p>
-            <Badge variant="secondary" className="mt-0.5 text-[10px] px-1.5 py-0">
+            <p className="text-xs font-semibold flex items-center gap-1" data-testid="text-event-time">
+              <Clock className="h-3 w-3" />
+              {time}
+            </p>
+            <Badge variant="secondary" className={`mt-1 text-xs px-2 py-0.5 transition-all duration-500 ease-out ${
+              isHovered ? 'shadow-md' : ''
+            }`}>
               {duration}
             </Badge>
           </div>
         </div>
         
-        <p className="text-[11px] text-foreground/80 leading-snug" data-testid="text-event-description">
+        <p className="text-xs text-foreground/90 leading-relaxed" data-testid="text-event-description">
           {description}
         </p>
 
-        {/* Additional options that appear on hover */}
+        {/* Additional options that appear on hover with stagger animation */}
         {isHovered && additionalOptions.length > 0 && (
-          <div className="mt-3 pt-2 border-t border-border/50 space-y-1.5 animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="mt-4 pt-3 border-t border-border/50 space-y-2 animate-in fade-in-up duration-500">
             {additionalOptions.map((option, index) => {
               const OptionIcon = option.icon;
               return (
-                <div key={index} className="flex items-center justify-between text-[10px]">
-                  <div className="flex items-center gap-1.5 text-muted-foreground">
-                    <OptionIcon className="h-3 w-3" />
-                    <span>{option.label}</span>
+                <div 
+                  key={index} 
+                  className="flex items-center justify-between text-xs p-2 rounded-lg bg-background/50 hover:bg-background transition-all duration-300 ease-out scale-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <OptionIcon className="h-4 w-4" />
+                    <span className="font-medium">{option.label}</span>
                   </div>
-                  <span className="font-medium text-foreground">{option.value}</span>
+                  <span className="font-semibold text-foreground">{option.value}</span>
                 </div>
               );
             })}
           </div>
         )}
 
-        {/* Alternative locations */}
+        {/* Alternative locations with enhanced styling */}
         {isHovered && alternatives.length > 0 && (
-          <div className="mt-3 pt-2 border-t border-border/50 animate-in fade-in slide-in-from-top-3 duration-300">
-            <p className="text-[10px] font-semibold text-muted-foreground mb-2">Other Options Nearby:</p>
+          <div className="mt-4 pt-3 border-t border-border/50 animate-in fade-in-up duration-500" style={{ animationDelay: '200ms' }}>
+            <p className="text-xs font-bold text-foreground mb-3 flex items-center gap-2">
+              <span className="inline-block w-1 h-1 rounded-full bg-primary"></span>
+              Other Options Nearby
+            </p>
             <div className="space-y-2">
               {alternatives.map((alt, index) => (
                 <div 
                   key={index} 
-                  className="flex items-center justify-between p-1.5 rounded bg-muted/50 hover:bg-muted transition-colors cursor-pointer"
+                  className="flex items-center justify-between p-2 rounded-lg bg-gradient-to-br from-muted/60 to-muted/40 hover:from-muted hover:to-muted/60 transition-all duration-500 ease-out cursor-pointer border border-transparent hover:border-border/50 shimmer-effect group/alt scale-in"
+                  style={{ animationDelay: `${(index + 2) * 100}ms` }}
                 >
                   <div className="flex-1">
-                    <p className="text-[10px] font-medium text-foreground">{alt.name}</p>
-                    <div className="flex items-center gap-2 mt-0.5">
-                      <span className="text-[9px] text-muted-foreground flex items-center gap-0.5">
-                        <Star className="h-2 w-2 fill-yellow-500 text-yellow-500" />
-                        {alt.rating}
+                    <p className="text-xs font-semibold text-foreground group-hover/alt:text-primary transition-colors duration-300">{alt.name}</p>
+                    <div className="flex items-center gap-3 mt-1">
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Star className="h-3 w-3 fill-yellow-500 text-yellow-500" />
+                        <span className="font-medium">{alt.rating}</span>
                       </span>
-                      <span className="text-[9px] text-muted-foreground">{alt.distance}</span>
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        <MapPin className="h-3 w-3" />
+                        {alt.distance}
+                      </span>
                     </div>
                   </div>
-                  <span className="text-[10px] font-medium text-foreground ml-2">{alt.price}</span>
+                  <span className="text-xs font-bold text-primary ml-3">{alt.price}</span>
                 </div>
               ))}
             </div>

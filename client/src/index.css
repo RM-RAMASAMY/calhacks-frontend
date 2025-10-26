@@ -317,7 +317,9 @@
   }
 }
 
-/* Highlighted marker animation */
+/* Advanced Animations */
+
+/* Highlighted marker animation with pulse ring */
 .highlighted-marker {
   animation: markerPulse 1.5s ease-in-out infinite;
 }
@@ -331,4 +333,308 @@
     transform: scale(1.1);
     opacity: 0.9;
   }
+}
+
+/* Animated gradient background */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background: linear-gradient(135deg, 
+    hsl(var(--primary) / 0.05),
+    hsl(var(--chart-2) / 0.05),
+    hsl(var(--chart-1) / 0.05)
+  );
+  background-size: 200% 200%;
+  animation: gradientShift 8s ease infinite;
+}
+
+/* Floating animation for cards */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Shimmer effect */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shimmer 2s infinite;
+}
+
+/* Pulse ring effect for markers */
+@keyframes pulseRing {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.pulse-ring {
+  animation: pulseRing 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Scale in animation */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+/* Glow effects removed for cleaner markers */
+
+/* Enhanced glassmorphism */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-effect {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Timeline connector animation */
+@keyframes drawLine {
+  from {
+    height: 0;
+  }
+  to {
+    height: 100%;
+  }
+}
+
+.animate-draw-line {
+  animation: drawLine 0.5s ease-out forwards;
+}
+
+/* Particle effect */
+@keyframes particleFloat {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.3;
+  }
+  75% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(100px, -100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: hsl(var(--primary) / 0.3);
+  animation: particleFloat 4s ease-in-out infinite;
+}
+
+/* Stagger animation delays for children */
+.stagger-animation > * {
+  animation: fadeInUp 0.5s ease-out;
+  animation-fill-mode: both;
+}
+
+.stagger-animation > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-animation > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-animation > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-animation > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-animation > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-animation > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-animation > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-animation > *:nth-child(8) { animation-delay: 0.4s; }
+
+/* Border animation */
+@keyframes borderGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px hsl(var(--primary) / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.6);
+  }
+}
+
+.border-glow {
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+/* Custom scrollbar styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.3);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
+}
+
+/* Animated background for gradients */
+.bg-size-200 {
+  background-size: 200% auto;
+}
+
+.bg-pos-100 {
+  background-position: 100% 0;
+}
+
+.hover\:bg-pos-100:hover {
+  background-position: 100% 0;
+}
+
+/* Leaflet popup custom styling */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid hsl(var(--border) / 0.5) !important;
+}
+
+.leaflet-popup-tip {
+  background: hsl(var(--card)) !important;
+  border: 1px solid hsl(var(--border) / 0.5) !important;
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 0 !important;
+}
+
+/* Animated polyline for map route */
+@keyframes dash {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+.animated-polyline {
+  animation: dash 1s linear infinite;
+}
+
+/* Clean marker styling without glow effects */
+.marker-no-glow,
+.marker-restaurant,
+.marker-hotel,
+.marker-activity,
+.marker-transit {
+  transition: transform 0.3s ease;
+}
+
+.marker-restaurant:hover,
+.marker-hotel:hover,
+.marker-activity:hover,
+.marker-transit:hover {
+  transform: scale(1.1);
+}
+
+/* Utility for better text rendering */
+.text-render-optimized {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Prevent text flicker during transitions */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+/* Smooth text size transitions without glitches */
+.smooth-text-transition {
+  transition: font-size 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: font-size;
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: auto;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }

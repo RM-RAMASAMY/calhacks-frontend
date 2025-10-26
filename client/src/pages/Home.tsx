@@ -37,22 +37,25 @@ export default function Home() {
               />
             </main>
 
-            {/* Floating top search panel */}
-            <div className="absolute top-3 left-1/2 -translate-x-1/2 z-50 w-full max-w-xl px-3 pointer-events-none">
-              <div className="bg-card/95 backdrop-blur-lg rounded-lg shadow-lg border border-border/50 pointer-events-auto">
-                <div className="px-3 py-2">
-                  <TripForm onGenerate={handleGenerate} />
-                </div>
+            {/* Floating top search panel with enhanced glassmorphism - right aligned */}
+            <div className="absolute top-3 right-4 z-50 w-full max-w-4xl pointer-events-none">
+              <div className="bg-card/90 backdrop-blur-2xl rounded-xl shadow-2xl border border-border/50 pointer-events-auto scale-in floating">
+                <TripForm onGenerate={handleGenerate} />
               </div>
             </div>
 
-            {/* Floating left panel - increased top margin to avoid overlap */}
-            <div className="absolute left-3 top-20 bottom-3 z-40 w-full max-w-[320px] lg:max-w-[360px] pointer-events-none">
-              <div className="h-full bg-card/95 backdrop-blur-lg rounded-lg shadow-lg border border-border/50 overflow-y-auto overflow-x-hidden pointer-events-auto">
-                <Timeline 
-                  events={itinerary.events}
-                  onEventHover={setHoveredEventId}
-                />
+            {/* Floating left panel with enhanced styling */}
+            <div className="absolute left-4 top-20 bottom-4 z-40 w-full max-w-[340px] lg:max-w-[380px] pointer-events-none">
+              <div className="h-full bg-card/90 backdrop-blur-2xl rounded-2xl shadow-2xl border border-border/50 overflow-hidden pointer-events-auto scale-in">
+                {/* Gradient overlay at top */}
+                <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none z-10"></div>
+                
+                <div className="h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
+                  <Timeline 
+                    events={itinerary.events}
+                    onEventHover={setHoveredEventId}
+                  />
+                </div>
               </div>
             </div>
           </>

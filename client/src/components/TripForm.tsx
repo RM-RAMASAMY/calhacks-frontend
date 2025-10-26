@@ -22,20 +22,18 @@ export function TripForm({ onGenerate }: TripFormProps) {
   };
 
   return (
-    <Card className="p-6">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <h2 className="text-2xl font-semibold font-serif mb-2">Plan Your Perfect Journey</h2>
-          <p className="text-muted-foreground text-sm">
-            Enter your destination and travel dates to create a personalized itinerary
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor="location" className="text-sm font-medium">Destination</Label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+    <Card className="p-3 shadow-xl border shimmer-effect relative overflow-hidden">
+      {/* Animated background gradient */}
+      <div className="absolute inset-0 animated-gradient opacity-30 pointer-events-none"></div>
+      
+      <form onSubmit={handleSubmit} className="space-y-3 relative z-10">        
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
+          <div className="space-y-1 scale-in">
+            <Label htmlFor="location" className="text-xs font-semibold flex items-center gap-1.5">
+              <MapPin className="h-3 w-3 text-primary" />
+              Destination
+            </Label>
+            <div className="relative group">
               <Input
                 id="location"
                 data-testid="input-location"
@@ -43,54 +41,62 @@ export function TripForm({ onGenerate }: TripFormProps) {
                 placeholder="e.g., Paris, France"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                className="pl-10"
+                className="h-9 text-sm border-2 focus:border-primary transition-all duration-300"
                 required
               />
             </div>
           </div>
           
-          <div className="space-y-2">
-            <Label htmlFor="start-date" className="text-sm font-medium">Start Date</Label>
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <div className="space-y-1 scale-in" style={{ animationDelay: '50ms' }}>
+            <Label htmlFor="start-date" className="text-xs font-semibold flex items-center gap-1.5">
+              <Calendar className="h-3 w-3 text-primary" />
+              Start
+            </Label>
+            <div className="relative group">
               <Input
                 id="start-date"
                 data-testid="input-start-date"
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="pl-10"
+                className="h-9 text-sm border-2 focus:border-primary transition-all duration-300"
                 required
               />
             </div>
           </div>
           
-          <div className="space-y-2">
-            <Label htmlFor="end-date" className="text-sm font-medium">End Date</Label>
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <div className="space-y-1 scale-in" style={{ animationDelay: '100ms' }}>
+            <Label htmlFor="end-date" className="text-xs font-semibold flex items-center gap-1.5">
+              <Calendar className="h-3 w-3 text-primary" />
+              End
+            </Label>
+            <div className="relative group">
               <Input
                 id="end-date"
                 data-testid="input-end-date"
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="pl-10"
+                className="h-9 text-sm border-2 focus:border-primary transition-all duration-300"
                 required
               />
             </div>
           </div>
+          
+          <div className="scale-in" style={{ animationDelay: '150ms' }}>
+            <Button 
+              type="submit" 
+              data-testid="button-generate"
+              className="w-full h-9 rounded-full px-6 text-sm font-bold bg-gradient-to-r from-primary via-blue-600 to-primary bg-size-200 hover:bg-pos-100 transition-all duration-500 shadow-lg hover:shadow-xl hover:scale-105 relative overflow-hidden group"
+            >
+              <span className="relative z-10 flex items-center gap-1.5">
+                <Sparkles className="h-4 w-4" />
+                Generate
+              </span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+            </Button>
+          </div>
         </div>
-        
-        <Button 
-          type="submit" 
-          data-testid="button-generate"
-          className="w-full md:w-auto rounded-full px-8"
-          size="lg"
-        >
-          <Sparkles className="h-4 w-4 mr-2" />
-          Generate Itinerary
-        </Button>
       </form>
     </Card>
   );
